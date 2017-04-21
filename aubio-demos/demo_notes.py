@@ -13,8 +13,8 @@ downsample = 1
 samplerate = 44100 // downsample
 if len( sys.argv ) > 2: samplerate = int(sys.argv[2])
 
-win_s = 512 // downsample # fft size
-hop_s = 256 // downsample # hop size
+win_s = 1024 // downsample # fft size
+hop_s = 512 // downsample # hop size
 
 s = source(filename, samplerate, hop_s)
 samplerate = s.samplerate
