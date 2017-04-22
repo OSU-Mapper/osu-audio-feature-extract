@@ -13,3 +13,5 @@ Data/
 pyvenv.cfg
 .venv
 pip-selfcheck.json
+
+__pycache__/demo_waveform_plot.cpython-36.pyc
