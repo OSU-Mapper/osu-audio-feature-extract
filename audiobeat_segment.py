@@ -10,10 +10,15 @@ Created on Mon Apr 24 19:12:47 2017
 # We'll need numpy for some mathematical operations
 import numpy as np
 import csv
-
+import sys
+import argparse
 # matplotlib for displaying the output
 import matplotlib.style as ms
 ms.use('seaborn-muted')
+
+if len(sys.argv) is not 2:
+    raise argparse.ArgumentTypeError('the number of argument has to be 2')
+    exit(-1)
 
 
 # and IPython.display for audio output
@@ -27,21 +32,21 @@ import librosa.display
 # or uncomment the line below and point it at your favorite song:
 #
 #audio_path = 'Data/test.wav'
-audio_path = "D:/Program Files/osu!/Songs/99506 ClariS - Songs Compilation/ClariS Compilation.mp3"
+audio_path = sys.argv[1]
 
 y, sr = librosa.load(audio_path)
 
 onset_env = librosa.onset.onset_strength(y, sr=sr)
 tempo = librosa.beat.tempo(onset_envelope=onset_env, sr=sr)
-print (tempo)
+# print (tempo)
 
 dtempo = librosa.beat.tempo(onset_envelope=onset_env, sr=sr,
                             aggregate=None)
-print (len(dtempo))
+# print (len(dtempo))
 arr_bpm = []
 arr_bpm.append((dtempo[0],0))
 pre = dtempo[0]
-print (pre)
+# print (pre)
 timeframe = []
 for i in range(1, len(dtempo)):
     tmp = dtempo[i]
@@ -49,13 +54,13 @@ for i in range(1, len(dtempo)):
         pre = tmp
         arr_bpm.append((tmp,i))
         timeframe.append(i)
-print (arr_bpm)
+# print (arr_bpm)
 
 o_env = librosa.onset.onset_strength(y, sr=sr)
 times = librosa.frames_to_time(np.arange(len(o_env)), sr=sr)
 onset_frames = librosa.onset.onset_detect(onset_envelope=o_env, sr=sr)
 
-print (onset_frames)
+# print (onset_frames)
 
 p = 1
 l = len(arr_bpm)
@@ -86,7 +91,7 @@ for i in range(l):
     bpm_result.append((times[arr_bpm[i][1]]+times[int(off[i])],arr_bpm[i][0]))
 print (bpm_result)
 
-np.savetxt('bpm_dynamic.csv', bpm_result, delimiter = ',') 
+#np.savetxt('bpm_dynamic.csv', bpm_result, delimiter = ',') 
     
     
 
