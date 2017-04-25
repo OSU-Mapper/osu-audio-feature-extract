@@ -1,0 +1,92 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Mon Apr 24 19:12:47 2017
+
+@author: mw352
+"""
+
+#config InlineBackend.figure_format='retina'
+#matplotlib notebook
+# We'll need numpy for some mathematical operations
+import numpy as np
+import csv
+
+# matplotlib for displaying the output
+import matplotlib.style as ms
+ms.use('seaborn-muted')
+
+
+# and IPython.display for audio output
+# Librosa for audio
+import librosa
+# And the display module for visualization
+import librosa.display
+
+#audio_path = librosa.util.example_audio_file()
+
+# or uncomment the line below and point it at your favorite song:
+#
+#audio_path = 'Data/test.wav'
+audio_path = "D:/Program Files/osu!/Songs/99506 ClariS - Songs Compilation/ClariS Compilation.mp3"
+
+y, sr = librosa.load(audio_path)
+
+onset_env = librosa.onset.onset_strength(y, sr=sr)
+tempo = librosa.beat.tempo(onset_envelope=onset_env, sr=sr)
+print (tempo)
+
+dtempo = librosa.beat.tempo(onset_envelope=onset_env, sr=sr,
+                            aggregate=None)
+print (len(dtempo))
+arr_bpm = []
+arr_bpm.append((dtempo[0],0))
+pre = dtempo[0]
+print (pre)
+timeframe = []
+for i in range(1, len(dtempo)):
+    tmp = dtempo[i]
+    if (dtempo[i] != pre):
+        pre = tmp
+        arr_bpm.append((tmp,i))
+        timeframe.append(i)
+print (arr_bpm)
+
+o_env = librosa.onset.onset_strength(y, sr=sr)
+times = librosa.frames_to_time(np.arange(len(o_env)), sr=sr)
+onset_frames = librosa.onset.onset_detect(onset_envelope=o_env, sr=sr)
+
+print (onset_frames)
+
+p = 1
+l = len(arr_bpm)
+lo = len(onset_frames)
+offset = 0
+off = []
+for i in range(len(onset_frames)):
+    if p > l:
+        break
+    arr_off = []
+    unit_bpm = arr_bpm[p - 1][0] / 8
+    if (p == l):
+        while (i < lo):
+            arr_off.append((onset_frames[i] - arr_bpm[p - 1][1]) % unit_bpm)
+            i = i + 1
+        off.append(np.median(arr_off))
+        break
+    while(i < lo and onset_frames[i] < arr_bpm[p][1]):
+        arr_off.append((onset_frames[i] - arr_bpm[p - 1][1]) % unit_bpm)
+        i = i + 1
+    i = i - 1
+    p = p + 1
+    #arr_bpm[p - 1][2] = 1
+    off.append(np.median(arr_off))
+
+bpm_result = []
+for i in range(l):
+    bpm_result.append((times[arr_bpm[i][1]]+times[int(off[i])],arr_bpm[i][0]))
+print (bpm_result)
+
+np.savetxt('bpm_dynamic.csv', bpm_result, delimiter = ',') 
+    
+    
+
