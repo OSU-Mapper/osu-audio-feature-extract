@@ -91,7 +91,30 @@ for i in range(l):
     bpm_result.append((times[arr_bpm[i][1]]+times[int(off[i])],arr_bpm[i][0]))
 print (bpm_result)
 
-#np.savetxt('bpm_dynamic.csv', bpm_result, delimiter = ',') 
+# endtime = times[len(o_env)-1]
+#bpm expension
+matrix = []
+count = 1
+division = 8
+for i in range(len(bpm_result)):
+    t, bpm = bpm_result[i]
+    simu_t = t
+    if i < len(bpm_result) - 1:
+        next_t = bpm_result[i+1][0]
+    else:
+        next_t = times[len(o_env)-1]
+    delt = 1 / (division * (bpm / 60))
+    while (simu_t < next_t):
+        matrix.append((count, simu_t))
+        simu_t += delt
+        count += 1
+
+
+
+
+# bpm_result = [(i, 1000 * t) for (i, t) in matrix] 
+
+# np.savetxt('bpm_dynamic.csv', bpm_result, delimiter = ',') 
     
     
 
