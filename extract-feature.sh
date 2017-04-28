@@ -1,19 +1,24 @@
 #
 
-if ! [ "$#" -eq 1 ] || ! [ -d "$1" ]; then
+if ([ "$#" -ne 1 ] && [ "$#" -ne 2 ] )|| ! [ -d "$1" ]; then
   echo "Usage: $0 DIRECTORY" >&2
   exit 1
 fi
 
 if [ "$#" -eq 2 ]; then
-    echo "Using maximum: $1 (for test)"
-    count=$1
+    echo "Using maximum: $2 (for test)"
+    count=$2
 fi 
 
-for path in $0 ;do
+for path in $1/* ;do
     name=$(ls "$path"/*.osu | head -n 1)
     mp3name=$(python script/audioname.py "$name")
     mp3path="$path/$mp3name"
     echo ">>> Extracting: $mp3path"
-    python audiobeat
+    python script/audioquarter_segment.py "$mp3path" "$path/timing_points.v1.csv" "$path/all_features.v1.csv"
+    count=$((count - 1))
+    if (("$count" <= "0")) 
+    then
+        break;
+    fi
 done
