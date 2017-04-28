@@ -72,19 +72,20 @@ def merge(x, y):
             y[i] = [int(y[i][0]),0,0,int(y[i][1]),0,0,0,0,0,0,y[i][2]]
     return y
 if __name__ == "__main__":
-    if len(sys.argv) != 3:
-        print( "usage: inputfile outputfile")
-        raise argparse.ArgumentTypeError('the number of argument has to be 3')
+    if len(sys.argv) != 4:
+        print( "usage: osufile csvFile outputfile")
+        raise argparse.ArgumentTypeError('the number of argument has to be 4')
         exit(-1)
     filePath = sys.argv[1]
     csvPath  = sys.argv[2]
+    outputPath  = sys.argv[3]
     hitobject = search("HitObjects", filePath)
     # print (hitobject)
     beats = getbeat(csvPath)
     # print(beats)
     result = merge(hitobject, beats)
     # print(result)
-    with open("labeledFeature.csv", "w") as file:
+    with open(outputPath, "w") as file:
         writer = csv.writer(file)
         writer.writerows(result)
     
