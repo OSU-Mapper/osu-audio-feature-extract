@@ -1,5 +1,7 @@
 #
 
+version=1
+
 if ([ "$#" -ne 1 ] && [ "$#" -ne 2 ] )|| ! [ -d "$1" ]; then
   echo "Usage: $0 DIRECTORY" >&2
   exit 1
@@ -15,7 +17,7 @@ for path in $1/* ;do
     mp3name=$(python script/audioname.py "$name")
     mp3path="$path/$mp3name"
     echo ">>> Extracting: $mp3path"
-    python script/audioquarter_segment.py "$mp3path" "$path/timing_points.v1.csv" "$path/all_features.v1.csv"
+    python script/audioquarter_segment.py "$mp3path" "$path/timing_points.v$version.csv" "$path/all_features.v$version.csv"
     count=$((count - 1))
     if (("$count" <= "0")) 
     then
