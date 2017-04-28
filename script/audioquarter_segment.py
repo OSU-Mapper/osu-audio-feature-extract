@@ -15,7 +15,7 @@ version = 1
 if len(sys.argv) is not 4:
     raise argparse.ArgumentTypeError('''the number of argument has to be 4
     Usage py filename.py audio timing feature 
-        Sample: .py path/to/audio.wav path/to/timing_points.v{version}.csv path/to/all_features.v{version}.csv
+        example: .py path/to/audio.wav path/to/timing_points.v{version}.csv path/to/all_features.v{version}.csv
             Audio: audio file
             Timeing: path to timing file csv
             Feature: path to feature file csv
@@ -96,6 +96,7 @@ for i in range(l):
     bpm_result.append((times[arr_bpm[i][1]]+times[int(off[i])],arr_bpm[i][0]))
 #print (bpm_result)
 
+# 
 with open(sys.argv[2], "w") as file:
         writer = csv.writer(file)
         writer.writerows(bpm_result)
@@ -125,6 +126,8 @@ bpm_result = [(i, 1000*t, o_env[librosa.core.time_to_frames(t, sr=sr)[0]]) for (
 
 # print(bpm_result)
 # np.savetxt('bpm_dynamic_2.csv', bpm_result, delimiter=',')
+
+# sequance, time, feature
 with open(sys.argv[3], "w") as file:
         writer = csv.writer(file)
         writer.writerows(bpm_result)
