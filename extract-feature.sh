@@ -17,7 +17,11 @@ for path in $1/* ;do
     mp3name=$(python script/audioname.py "$name")
     mp3path="$path/$mp3name"
     echo ">>> Extracting: $mp3path"
-    python script/audioquarter_segment.py "$mp3path" "$path/timing_points.v$version.csv" "$path/all_features.v$version.csv"
+    python script/audioquarter_segment.py "$mp3path" "$path/timing_points.v$version.csv" "$path/audio_features.v$version.csv"
+    for osuPath in $path/*.osu; do
+        python script/timeToBeat.py "$osuPath" "$path/audio_features.v$version.csv" "$path/trainable-features.v$version.csv" 
+    done
+
     count=$((count - 1))
     if (("$count" <= "0")) 
     then
