@@ -1,12 +1,4 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Mon Apr 24 19:12:47 2017
 
-@author: mw352
-"""
-
-#config InlineBackend.figure_format='retina'
-#matplotlib notebook
 # We'll need numpy for some mathematical operations
 import numpy as np
 import csv
@@ -94,7 +86,7 @@ for i in range(len(onset_frames)):
 bpm_result = []
 for i in range(l):
     bpm_result.append((times[arr_bpm[i][1]]+times[int(off[i])],arr_bpm[i][0]))
-print (bpm_result)
+#print (bpm_result)
 
 with open("time_point_2.csv", "w") as file:
         writer = csv.writer(file)
