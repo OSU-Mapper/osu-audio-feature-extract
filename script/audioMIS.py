@@ -37,8 +37,7 @@ def getOnset(y, sr, times):
     # onset_frames = librosa.onset.onset_detect(onset_envelope=o_env, sr=sr)
     # onset_result = [times[i] for i in onset_frames]
     onset_result = librosa.onset.onset_detect(y=y, sr=sr, precise=True, units='time')
-    # print (onset_result)
-    onset_result = [1000 * e for e in onset_result]
+    print (onset_result)
     return onset_result
    
 
@@ -55,7 +54,7 @@ def closestindex(x, y):
         return i
 
 def isonset(x, y):
-    # x = [1000 * e for e in x]
+    x = [1000 * e for e in x]
     feature_copy = y
     startindex = 0
     for i in range(len(x)):
@@ -101,14 +100,12 @@ if __name__ == "__main__":
     dynamic_bpm = createBPM(sys.argv[1])
     mis_result = createMIS(dynamic_bpm, sr, times, o_env)
     onset = getOnset(y, sr, times)
-    print (onset)
     # sequence_number, t, onset_strength, isbeat, isOnset 
     prefeature = isonset(onset, mis_result)
     resul_prefeature = [[f[2],f[3], f[4]] for f in prefeature]
     producepic_feature = [[f[0],f[1], f[2]] for f in prefeature]
-
     # print (producepic_feature)
-    # with open("tmp.csv", "w") as file:
-    #     writer = csv.writer(file)
-    #     writer.writerows(onset)
+    with open("tmp.csv", "w") as file:
+        writer = csv.writer(file)
+        writer.writerows(resul_prefeature)
     # addmfcc(y, sr, prefeature)
