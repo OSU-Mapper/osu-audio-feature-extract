@@ -11,13 +11,18 @@ def deduplicate(bpm):
         if bpm[i][1] != bpm[i - 1][1]:
             dynamic_bpm.append(bpm[i])
     return dynamic_bpm
-if len(sys.argv) != 2:
+
+def createBPM(input):
+    time_point = search("TimingPoints", input)
+    bpm = [x[:2] for x in time_point]
+    bpm = [[int(x[0]), float(x[1])] for x in bpm]
+    bpm = [(x[0], 60000 / ((-100 / x[1]) * float(time_point[0][1]))) if x[1] < 0 else (x[0], 60000 / x[1]) for x in bpm] 
+    dynamic_bpm = deduplicate(bpm)
+    return dynamic_bpm
+
+if __name__ == "__main__":
+    if len(sys.argv) != 2:
         print( "usage: inputfile outputfile")
-        raise argparse.ArgumentTypeError('the number of argument has to be 3')
+        raise argparse.ArgumentTypeError('the number of argument has to be 2')
         exit(-1)
-time_point = search("TimingPoints", sys.argv[1])
-bpm = [x[:2] for x in time_point]
-bpm = [[int(x[0]), float(x[1])] for x in bpm]
-bpm = [(x[0], 60000 / ((-100 / x[1]) * float(time_point[0][1]))) if x[1] < 0 else (x[0], 60000 / x[1]) for x in bpm] 
-dynamic_bpm = deduplicate(bpm)
-print (dynamic_bpm)
+    createBPM(sys.argv[1])
