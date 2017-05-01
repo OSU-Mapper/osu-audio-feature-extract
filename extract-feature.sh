@@ -12,6 +12,8 @@ if [ "$#" -eq 2 ]; then
     count=$2
 fi 
 
+mkdir -p "Data/Trainables" 
+
 for path in $1/* ;do
     name=$(ls "$path"/*.osu | head -n 1)
     mp3name=$(python script/audioname.py "$name")
