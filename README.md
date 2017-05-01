@@ -2,6 +2,11 @@
 
 # How to
 
+### Install dependencies
+``` shell
+pip install --upgrade git+https://github.com/OSU-Mapper/librosa.git@dynamic-tempo
+```
+
 ## Extract features from audio
 ``` bash
 # all
@@ -14,7 +19,3 @@
 ### Default path to Beatmaps
 Data/Beatmaps/*
 
-### Use custom Librosa
-``` shell
-pip install --upgrade git+https://github.com/OSU-Mapper/librosa.git@dynamic-tempo
-```
