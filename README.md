@@ -2,7 +2,7 @@
 
 # How to
 
-### Install dependencies
+## Install dependencies
 ``` shell
 pip install --upgrade git+https://github.com/OSU-Mapper/librosa.git@dynamic-tempo
 ```
