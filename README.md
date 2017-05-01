@@ -16,5 +16,5 @@ Data/Beatmaps/*
 
 ### Use custom Librosa
 ``` shell
-pip install git+https://github.com/OSU-Mapper/librosa.git@dynamic-tempo
+pip install --upgrade git+https://github.com/OSU-Mapper/librosa.git@dynamic-tempo
 ```
