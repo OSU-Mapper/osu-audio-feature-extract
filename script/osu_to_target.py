@@ -1,4 +1,4 @@
-# python osu_to_mis_target.py "Chasers - Lost (ktgster) [Normal].osu" "timing_point.csv" "hitobject.csv"
+# python osu_to_target.py "Chasers - Lost (ktgster) [Normal].osu" 
 
 import sys
 import argparse
@@ -36,15 +36,16 @@ def getHitobject(file):
     return hitobject	
 
 if __name__ == "__main__":
-    if len(sys.argv) != 4:
-        print( "usage: inputfile outputfile")
-        raise argparse.ArgumentTypeError('the number of argument has to be 4')
+    if len(sys.argv) != 2:
+        raise argparse.ArgumentTypeError('the number of argument has to be 2')
         exit(-1)
-    timing_point = search("TimingPoints", sys.argv[1])
-    with open(sys.argv[2], "w") as file:
-        writer = csv.writer(file)
-        writer.writerows(timing_point)
+    # timing_point = search("TimingPoints", sys.argv[1])
+    # with open(sys.argv[2], "w") as file:
+    #     writer = csv.writer(file)
+    #     writer.writerows(timing_point)
     hitobject = getHitobject(sys.argv[1])
-    with open(sys.argv[3], "w") as file:
-        writer = csv.writer(file)
-        writer.writerows(hitobject)
+    writer = csv.writer(sys.stdout)
+    writer.writerows(hitobject)
+    # with open(sys.argv[3], "w") as file:
+    #     writer = csv.writer(file)
+    #     writer.writerows(hitobject)

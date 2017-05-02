@@ -1,4 +1,4 @@
-#python tp_to_mis.py "dynamic_bpm.csv" "mis.csv"
+#python tp_to_mis.py "dynamic_bpm.csv" 
 import sys
 import csv
 import argparse
@@ -21,9 +21,9 @@ def getMIS(dy_bpm):
     return mis_result
 
 if __name__ == "__main__":
-    if len(sys.argv) != 3:
+    if len(sys.argv) != 2:
         print( "usage: inputfile outputfile")
-        raise argparse.ArgumentTypeError('the number of argument has to be 3')
+        raise argparse.ArgumentTypeError('the number of argument has to be 2')
         exit(-1)
 
     with open(sys.argv[1], 'r') as my_file:
@@ -32,6 +32,9 @@ if __name__ == "__main__":
 
     mis_result = getMIS(dy_bpm)
 
-    with open(sys.argv[2], "w") as file:
-        writer = csv.writer(file)
-        writer.writerows(mis_result)
+    # with open(sys.argv[2], "w") as file:
+    #     writer = csv.writer(file)
+    #     writer.writerows(mis_result)
+
+    writer = csv.writer(sys.stdout)
+    writer.writerows(mis_result)
