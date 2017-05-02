@@ -43,8 +43,12 @@ case $1 in
                 Maximium number of beatmap sets to extract
 
         example:
+            $0
+
             $0 -f 139677 Data/Beatmaps
+
             $0 -f 1 -n 1 Data/Beatmaps
+            
         " >&2
         exit 1
         shift # past argument
