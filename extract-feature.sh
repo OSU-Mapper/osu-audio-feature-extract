@@ -3,6 +3,7 @@
 version=1
 
 count=99999
+allsets_path="Data/Beatmaps"
 
 while [[ $# -gt 1 ]]
 do
@@ -19,23 +20,6 @@ do
             echo "=== Only beatmap start with \`$file\`."
             shift # past argument
             ;;
-        -h|--help)
-            echo "Usage: $0 <-f id> <-n number> DIRECTORY
-            arguments:
-                -f, --file
-                    Beatmap Set ID
-                    Will match just the begining of a string
-                    e.g. 1 will match 1 11 and 123
-                -n, --number
-                    Maximium number of beatmap sets to extract
-
-            example:
-                $0 -f 139677 Data/Beatmaps
-                $0 -f 1 -n 1 Data/Beatmaps
-            " >&2
-            exit 1
-            shift # past argument
-            ;;
         --default) # Does nothing
             DEFAULT=YES
             ;;
@@ -47,8 +31,35 @@ do
     shift # past argument or value
 done
 
-if [ "$#" -ne 1 ] || ! [ -d "$1" ]; then
-    echo "Usage: $0 <-f beatmap id> <-n max beatmapsets to process> DIRECTORY" >&2
+case $1 in
+    -h|--help)
+        echo "Usage: $0 <-f id> <-n number> DIRECTORY
+        arguments:
+            -f, --file
+                Beatmap Set ID
+                Will match just the begining of a string
+                e.g. 1 will match 1 11 and 123
+            -n, --number
+                Maximium number of beatmap sets to extract
+
+        example:
+            $0 -f 139677 Data/Beatmaps
+            $0 -f 1 -n 1 Data/Beatmaps
+        " >&2
+        exit 1
+        shift # past argument
+        ;;
+    *)
+        ;;
+esac
+
+if [ "$#" -eq 1 ]; then
+    allsets_path="$1"
+fi
+
+if ! [ -d "$allsets_path" ]; then
+    echo "Usage: $0 <-f beatmap id> <-n max beatmapsets to process> DIRECTORY
+    See $0 --help" >&2
     exit 1
 fi
 
@@ -57,10 +68,10 @@ mkdir -p  "$trainable_gather_path"
 
 SAVEIFS=$IFS
 IFS=$(echo -en "\n\b")
-beatmaps_sets=$(ls "$1" | grep "^$file")
+beatmaps_sets=$(ls "$allsets_path" | grep "^$file")
 for set_name in ${beatmaps_sets[@]}
 do
-    set_path="$1/$set_name"
+    set_path="$allsets_path/$set_name"
     name=$(ls "$set_path"/*.osu | head -n 1)
     mp3name=$(python script/audioname.py "$name")
     mp3path="$set_path/$mp3name"
@@ -68,30 +79,30 @@ do
     set_training_path="$set_path/Trainings" 
     mkdir -p "$set_training_path" 
     
-    # A
-    python script/mp3_to_tp.py "$mp3path" > "$set_training_path/timing_points.v$version.csv"
-    # B
-    python script/tp_to_mis.py "$set_training_path/timing_points.v$version.csv" > "$set_training_path/mis.v$version.csv"
-    # D
-    python script/mp3_mis_to_tr_f.py "$mp3path" "$set_training_path/mis.v$version.csv" > "$set_training_pathaudio_features.v$version.csv"
+    # # A
+    # python script/mp3_to_tp.py "$mp3path" > "$set_training_path/timing_points.v$version.csv"
+    # # B
+    # python script/tp_to_mis.py "$set_training_path/timing_points.v$version.csv" > "$set_training_path/mis.v$version.csv"
+    # # D
+    # python script/mp3_mis_to_tr_f.py "$mp3path" "$set_training_path/mis.v$version.csv" > "$set_training_pathaudio_features.v$version.csv"
 
     for osu_path in "$set_path"/*.osu; do
         osu_diff=$(python script/osuDiff.py "$osu_path")
         echo ">>>>> Difficualty: $osu_diff"
-        # C
-        python script/osu_to_target.py "$osu_path" > "$set_training_path/$osu_diff.target_features.v$version.csv"
-        # E
-        python script/target_mis_to_tr_t.py \ 
-            "$set_training_path/$osu_diff.target_features.v$version.csv"\ 
-            "$set_training_path/mis.v$version.csv"\ 
-            > "$set_training_path/$osu_diff.trainable_target.v$version.csv"
-        # F
-        python script/tr_f_tr_t_to_trainable.py \ 
-            "$set_training_path/$osu_diff.target_features.v$version.csv"\ 
-            "$set_training_path/$osu_diff.trainable_target.v$version.csv"\ 
-            > "$set_training_path/$osu_diff.trainable_all.v$version.csv"
-        # Done
-        cp "$set_training_path/$osu_diff.trainable_all.v$version.csv" "$trainable_gather_path/$osu_diff.$set_name.trainable_all.v$version.csv" 
+        # # C
+        # python script/osu_to_target.py "$osu_path" > "$set_training_path/$osu_diff.target_features.v$version.csv"
+        # # E
+        # python script/target_mis_to_tr_t.py \ 
+        #     "$set_training_path/$osu_diff.target_features.v$version.csv"\ 
+        #     "$set_training_path/mis.v$version.csv"\ 
+        #     > "$set_training_path/$osu_diff.trainable_target.v$version.csv"
+        # # F
+        # python script/tr_f_tr_t_to_trainable.py \ 
+        #     "$set_training_path/$osu_diff.target_features.v$version.csv"\ 
+        #     "$set_training_path/$osu_diff.trainable_target.v$version.csv"\ 
+        #     > "$set_training_path/$osu_diff.trainable_all.v$version.csv"
+        # # Done
+        # cp "$set_training_path/$osu_diff.trainable_all.v$version.csv" "$trainable_gather_path/$osu_diff.$set_name.trainable_all.v$version.csv" 
     done
 
     # Count down
