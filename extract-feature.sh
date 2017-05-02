@@ -20,6 +20,12 @@ do
             echo "=== Only beatmap start with \`$file\`."
             shift # past argument
             ;;
+        --nothing)
+            if [ "$2" = 1 ] || [ "$2" = "true" ]; then
+                nothing="true"
+            fi
+            shift # past argument
+            ;;
         --default) # Does nothing
             DEFAULT=YES
             ;;
@@ -41,14 +47,22 @@ case $1 in
                 e.g. 1 will match 1 11 and 123
             -n, --number
                 Maximium number of beatmap sets to extract
+            --nothing
+                Do nothing just scan files
 
         example:
             $0
 
-            $0 -f 139677 Data/Beatmaps
+            $0 -file 139677 Data/Beatmaps
 
-            $0 -f 1 -n 1 Data/Beatmaps
-            
+            $0 -file 1 -n 1 Data/Beatmaps
+
+            $0 --nothing
+
+            $0 -file 1 --nothing 1
+
+            $0 -n 1 --nothing true
+
         " >&2
         exit 1
         shift # past argument
@@ -83,30 +97,34 @@ do
     set_training_path="$set_path/Trainings" 
     mkdir -p "$set_training_path" 
     
-    # # A
-    # python script/mp3_to_tp.py "$mp3path" > "$set_training_path/timing_points.v$version.csv"
-    # # B
-    # python script/tp_to_mis.py "$set_training_path/timing_points.v$version.csv" > "$set_training_path/mis.v$version.csv"
-    # # D
-    # python script/mp3_mis_to_tr_f.py "$mp3path" "$set_training_path/mis.v$version.csv" > "$set_training_pathaudio_features.v$version.csv"
+    if ! [ "$nothing" == true ] ; then
+        # A
+        python script/mp3_to_tp.py "$mp3path" > "$set_training_path/timing_points.v$version.csv"
+        # B
+        python script/tp_to_mis.py "$set_training_path/timing_points.v$version.csv" > "$set_training_path/mis.v$version.csv"
+        # D
+        python script/mp3_mis_to_tr_f.py "$mp3path" "$set_training_path/mis.v$version.csv" > "$set_training_pathaudio_features.v$version.csv"
+    fi
 
     for osu_path in "$set_path"/*.osu; do
         osu_diff=$(python script/osuDiff.py "$osu_path")
         echo ">>>>> Difficualty: $osu_diff"
-        # # C
-        # python script/osu_to_target.py "$osu_path" > "$set_training_path/$osu_diff.target_features.v$version.csv"
-        # # E
-        # python script/target_mis_to_tr_t.py \ 
-        #     "$set_training_path/$osu_diff.target_features.v$version.csv"\ 
-        #     "$set_training_path/mis.v$version.csv"\ 
-        #     > "$set_training_path/$osu_diff.trainable_target.v$version.csv"
-        # # F
-        # python script/tr_f_tr_t_to_trainable.py \ 
-        #     "$set_training_path/$osu_diff.target_features.v$version.csv"\ 
-        #     "$set_training_path/$osu_diff.trainable_target.v$version.csv"\ 
-        #     > "$set_training_path/$osu_diff.trainable_all.v$version.csv"
-        # # Done
-        # cp "$set_training_path/$osu_diff.trainable_all.v$version.csv" "$trainable_gather_path/$osu_diff.$set_name.trainable_all.v$version.csv" 
+        if ! [ "$nothing" == true ] ; then
+            # C
+            python script/osu_to_target.py "$osu_path" > "$set_training_path/$osu_diff.target_features.v$version.csv"
+            # E
+            python script/target_mis_to_tr_t.py \ 
+                "$set_training_path/$osu_diff.target_features.v$version.csv"\ 
+                "$set_training_path/mis.v$version.csv"\ 
+                > "$set_training_path/$osu_diff.trainable_target.v$version.csv"
+            # F
+            python script/tr_f_tr_t_to_trainable.py \ 
+                "$set_training_path/$osu_diff.target_features.v$version.csv"\ 
+                "$set_training_path/$osu_diff.trainable_target.v$version.csv"\ 
+                > "$set_training_path/$osu_diff.trainable_all.v$version.csv"
+            # Done
+            cp "$set_training_path/$osu_diff.trainable_all.v$version.csv" "$trainable_gather_path/$osu_diff.$set_name.trainable_all.v$version.csv" 
+        fi
     done
 
     # Count down
