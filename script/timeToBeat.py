@@ -5,8 +5,6 @@ import csv
 def search(input, file):
     hitobject = []
     with open(file, 'r') as my_file:
-        # lines = my_file.readlines()
-        # line_iter = iter(lines)
         csvreader = csv.reader(my_file)
         find = False
         target = "[" + input + "]"

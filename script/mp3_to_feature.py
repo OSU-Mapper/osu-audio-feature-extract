@@ -1,4 +1,4 @@
-# python mp3_to_feature.py "Chasers - Lost.mp3" "onset.csv" "mfcc.csv" "dynamic_bpm.csv" "o_env.csv" "times.csv"
+# python mp3_to_feature.py "Chasers - Lost.mp3" "onset.csv" "mfcc.csv" "dynamic_bpm.csv" 
 import sys
 import argparse
 import librosa
@@ -36,6 +36,8 @@ def getbpm(y, sr):
     dynamic_bpm = librosa.beat.dynamic_tempo_summary(y=y, sr=sr, precise=True, units='time')
     return dynamic_bpm
 
+def onset_strength(sr):
+    return [o_env[librosa.core.time_to_frames(e[1]/1000, sr=sr)[0]] for e in mis]
 
 if __name__ == "__main__":
     if len(sys.argv) != 7:
@@ -60,10 +62,4 @@ if __name__ == "__main__":
         writer = csv.writer(file)
         writer.writerows(dynamic_bpm)
     
-    with open(sys.argv[5], "w") as file:
-        writer = csv.writer(file)
-        writer.writerows([o_env])
 
-    with open(sys.argv[6], "w") as file:
-        writer = csv.writer(file)
-        writer.writerows([times])
