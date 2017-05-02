@@ -47,37 +47,37 @@ def getbeat(input):
             beats.append(line)
     return beats
 
-def closestindex(x, y):
-    for i in range(len(y)):
-        if y[i][1] == x:
-            return i
-        elif y[i][1] > x:
-            if i == 0:
-                return i
-            elif abs(y[i][1] - x) <= abs(y[i-1][1] - x):
-                return i
-            else:
-                return i - 1
-    if i == len(y) - 1:
-        return i
+# def closestindex(x, y):
+#     for i in range(len(y)):
+#         if y[i][1] == x:
+#             return i
+#         elif y[i][1] > x:
+#             if i == 0:
+#                 return i
+#             elif abs(y[i][1] - x) <= abs(y[i-1][1] - x):
+#                 return i
+#             else:
+#                 return i - 1
+#     if i == len(y) - 1:
+#         return i
 
 
-def merge(x, y):
-    print (len(x))
-    print (len(y))
-    feature_copy = y
-    for i in range(len(x)):
-        index = closestindex(x[i][2], y)
-        if len(feature_copy[index]) == 3:
-            tmp = x[i]
-            tmp[2] = int(y[index][1]) 
-            # print (tmp[2])
-            tmp[3] = 1
-            feature_copy[index] = [int(y[index][0])] + tmp + [y[index][2]]
-    for i in range(len(feature_copy)):
-        if len(feature_copy[i]) == 3:
-            feature_copy[i] = [int(y[i][0]),0,0,int(y[i][1]),0,0,0,0,0,0,y[i][2]]
-    return feature_copy
+# def merge(x, y):
+#     print (len(x))
+#     print (len(y))
+#     feature_copy = y
+#     for i in range(len(x)):
+#         index = closestindex(x[i][2], y)
+#         if len(feature_copy[index]) == 3:
+#             tmp = x[i]
+#             tmp[2] = int(y[index][1]) 
+#             # print (tmp[2])
+#             tmp[3] = 1
+#             feature_copy[index] = [int(y[index][0])] + tmp + [y[index][2]]
+#     for i in range(len(feature_copy)):
+#         if len(feature_copy[i]) == 3:
+#             feature_copy[i] = [int(y[i][0]),0,0,int(y[i][1]),0,0,0,0,0,0,y[i][2]]
+#     return feature_copy
 
 
 def closestindex(x, y):
@@ -98,12 +98,12 @@ def merge(x, y):
     startindex = 0
     for i in range(len(x)):
         index = closestindex(x[i], y)
-        if len(feature_copy[index + startindex]) == 3:
-            feature_copy[index + startindex] = [feature_copy[index + startindex][0]] + x[i] + feature_copy[index + startindex][2], feature_copy[index + startindex][3], 1) 
+        if len(feature_copy[index + startindex]) == 4:
+            feature_copy[index + startindex] = (feature_copy[index + startindex][0], feature_copy[index + startindex][1], feature_copy[index + startindex][2], feature_copy[index + startindex][3], 1) 
         startindex += index
         y = y[index:]
     for i in range(len(feature_copy)):
-        if len(feature_copy[i]) == 3:
+        if len(feature_copy[i]) == 4:
             feature_copy[i] = (feature_copy[i][0], feature_copy[i][1], feature_copy[i][2], feature_copy[i][3], 0)
     return feature_copy
 
