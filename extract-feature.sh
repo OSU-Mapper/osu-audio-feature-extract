@@ -124,7 +124,7 @@ do
                 > "$set_training_path/$osu_diff.trainable_target.v$version.csv"
             # F
             python script/tr_f_tr_t_to_trainable.py \
-                "$set_training_path/$osu_diff.target_features.v$version.csv" \
+                "$set_training_pathaudio_features.v$version.csv" \
                 "$set_training_path/$osu_diff.trainable_target.v$version.csv" \
                 > "$set_training_path/$osu_diff.trainable_all.v$version.csv"
             # Done
