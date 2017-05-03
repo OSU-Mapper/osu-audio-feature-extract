@@ -20,6 +20,11 @@ do
             echo "=== Only beatmap start with \`$file\`."
             shift # past argument
             ;;
+        -s|--start)
+            start="$2"
+            echo "=== Skip \`$start\` beatmap sets."
+            shift # past argument
+            ;;
         --nothing)
             if [ "$2" = 1 ] || [ "$2" = "true" ]; then
                 nothing="true"
