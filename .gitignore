@@ -1,6 +1,7 @@
 # Data
 Data/*
 !Data/Beatmap-Packs/Put-Beatmap-Packs-Here
+!Data/Trainables
 
 # Virtualenv
 # http://iamzed.com/2009/05/07/a-primer-on-virtualenv/
@@ -17,10 +18,12 @@ pip-selfcheck.json
 
 # iPython
 __pycache__/
+.ipynb_checkpoints
 
-
-#Mac 
+# Mac 
 .DS_Store
 
-
+# For debugging
+# if needed `ln -s <path/to/librosa/librosa> demos/librosa`
 demos/librosa
+
