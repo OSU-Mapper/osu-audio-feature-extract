@@ -108,7 +108,7 @@ do
         # B
         python script/tp_to_mis.py "$set_training_path/timing_points.v$version.csv" > "$set_training_path/mis.v$version.csv"
         # D
-        python script/mp3_mis_to_tr_f.py "$mp3path" "$set_training_path/mis.v$version.csv" > "$set_training_pathaudio_features.v$version.csv"
+        python script/mp3_mis_to_tr_f.py "$mp3path" "$set_training_path/mis.v$version.csv" > "$set_training_path/audio_features.v$version.csv"
     fi
 
     for osu_path in "$set_path"/*.osu; do
@@ -124,7 +124,7 @@ do
                 > "$set_training_path/$osu_diff.trainable_target.v$version.csv"
             # F
             python script/tr_f_tr_t_to_trainable.py \
-                "$set_training_pathaudio_features.v$version.csv" \
+                "$set_training_path/audio_features.v$version.csv" \
                 "$set_training_path/$osu_diff.trainable_target.v$version.csv" \
                 > "$set_training_path/$osu_diff.trainable_all.v$version.csv"
             # Done
