@@ -118,9 +118,15 @@ do
             # C
             python script/osu_to_target.py "$osu_path" > "$set_training_path/$osu_diff.target_features.v$version.csv"
             # E
-            python script/target_mis_to_tr_t.py    "$set_training_path/$osu_diff.target_features.v$version.csv"     "$set_training_path/mis.v$version.csv"    > "$set_training_path/$osu_diff.trainable_target.v$version.csv"
+            python script/target_mis_to_tr_t.py  \
+                "$set_training_path/$osu_diff.target_features.v$version.csv" \
+                "$set_training_path/mis.v$version.csv" \
+                > "$set_training_path/$osu_diff.trainable_target.v$version.csv"
             # F
-            python script/tr_f_tr_t_to_trainable.py    "$set_training_path/$osu_diff.target_features.v$version.csv"    "$set_training_path/$osu_diff.trainable_target.v$version.csv"   > "$set_training_path/$osu_diff.trainable_all.v$version.csv"
+            python script/tr_f_tr_t_to_trainable.py \
+                "$set_training_path/$osu_diff.target_features.v$version.csv" \
+                "$set_training_path/$osu_diff.trainable_target.v$version.csv" \
+                > "$set_training_path/$osu_diff.trainable_all.v$version.csv"
             # Done
             cp "$set_training_path/$osu_diff.trainable_all.v$version.csv" "$trainable_gather_path/$osu_diff.$set_name.trainable_all.v$version.csv" 
         fi
