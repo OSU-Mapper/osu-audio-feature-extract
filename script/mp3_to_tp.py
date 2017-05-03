@@ -1,7 +1,8 @@
-# python mp3_to_tp.py "Chasers - Lost.mp3" 
+# python mp3_to_tp.py "Casket of Star.mp3"
 import sys
 import argparse
 import librosa
+
 import librosa.display
 import csv
     
@@ -21,3 +22,7 @@ if __name__ == "__main__":
     
     writer = csv.writer(sys.stdout)
     writer.writerows(dynamic_bpm)
+
+    # with open("dynamic_bpm.csv", "w") as file:
+    #     writer = csv.writer(file)
+    #     writer.writerows(dynamic_bpm)

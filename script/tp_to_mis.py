@@ -32,7 +32,7 @@ if __name__ == "__main__":
 
     mis_result = getMIS(dy_bpm)
 
-    # with open(sys.argv[2], "w") as file:
+    # with open("mis.csv", "w") as file:
     #     writer = csv.writer(file)
     #     writer.writerows(mis_result)
 

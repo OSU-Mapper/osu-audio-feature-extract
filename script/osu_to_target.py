@@ -1,4 +1,4 @@
-# python osu_to_target.py "Chasers - Lost (ktgster) [Normal].osu" 
+# python osu_to_target.py "Demetori - Hoshi no Utsuwa ~ Casket of Star (happy30) [Yoeri's Easy].osu" 
 
 import sys
 import argparse
@@ -46,6 +46,6 @@ if __name__ == "__main__":
     hitobject = getHitobject(sys.argv[1])
     writer = csv.writer(sys.stdout)
     writer.writerows(hitobject)
-    # with open(sys.argv[3], "w") as file:
+    # with open("hitobject.csv", "w") as file:
     #     writer = csv.writer(file)
     #     writer.writerows(hitobject)
