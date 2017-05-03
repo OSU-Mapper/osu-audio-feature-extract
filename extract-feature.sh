@@ -20,6 +20,11 @@ do
             echo "=== Only beatmap start with \`$file\`."
             shift # past argument
             ;;
+        -s|--start)
+            start="$2"
+            echo "=== Skip \`$start\` beatmap sets."
+            shift # past argument
+            ;;
         --nothing)
             if [ "$2" = 1 ] || [ "$2" = "true" ]; then
                 nothing="true"
@@ -57,7 +62,7 @@ case $1 in
 
             $0 -file 1 -n 1 Data/Beatmaps
 
-            $0 --nothing
+            $0 --nothing 1
 
             $0 -file 1 --nothing 1
 
@@ -103,7 +108,7 @@ do
         # B
         python script/tp_to_mis.py "$set_training_path/timing_points.v$version.csv" > "$set_training_path/mis.v$version.csv"
         # D
-        python script/mp3_mis_to_tr_f.py "$mp3path" "$set_training_path/mis.v$version.csv" > "$set_training_pathaudio_features.v$version.csv"
+        python script/mp3_mis_to_tr_f.py "$mp3path" "$set_training_path/mis.v$version.csv" > "$set_training_path/audio_features.v$version.csv"
     fi
 
     for osu_path in "$set_path"/*.osu; do
@@ -113,14 +118,14 @@ do
             # C
             python script/osu_to_target.py "$osu_path" > "$set_training_path/$osu_diff.target_features.v$version.csv"
             # E
-            python script/target_mis_to_tr_t.py \ 
-                "$set_training_path/$osu_diff.target_features.v$version.csv"\ 
-                "$set_training_path/mis.v$version.csv"\ 
+            python script/target_mis_to_tr_t.py  \
+                "$set_training_path/$osu_diff.target_features.v$version.csv" \
+                "$set_training_path/mis.v$version.csv" \
                 > "$set_training_path/$osu_diff.trainable_target.v$version.csv"
             # F
-            python script/tr_f_tr_t_to_trainable.py \ 
-                "$set_training_path/$osu_diff.target_features.v$version.csv"\ 
-                "$set_training_path/$osu_diff.trainable_target.v$version.csv"\ 
+            python script/tr_f_tr_t_to_trainable.py \
+                "$set_training_path/audio_features.v$version.csv" \
+                "$set_training_path/$osu_diff.trainable_target.v$version.csv" \
                 > "$set_training_path/$osu_diff.trainable_all.v$version.csv"
             # Done
             cp "$set_training_path/$osu_diff.trainable_all.v$version.csv" "$trainable_gather_path/$osu_diff.$set_name.trainable_all.v$version.csv" 
