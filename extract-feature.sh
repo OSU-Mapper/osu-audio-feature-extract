@@ -57,7 +57,7 @@ case $1 in
 
             $0 -file 1 -n 1 Data/Beatmaps
 
-            $0 --nothing
+            $0 --nothing 1
 
             $0 -file 1 --nothing 1
 
