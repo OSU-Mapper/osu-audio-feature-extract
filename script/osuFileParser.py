@@ -14,11 +14,15 @@ def searchSublevel(x, y):
 			for line in line_iter:
 				if len(line.strip()) != 0:
 					if y in line:
-						l, r = line.split(':')
-						print(r.strip())
+						r = line.split(':')
+						r = r[1:]
+						first = r[0] 
+						r[0] = first.strip()
+						print(" ".join(r))
 						break
 				else: 
 					print("No such infomation in " + x)
 					break			
 		else:
 			print( "No such infomation in file")
+
