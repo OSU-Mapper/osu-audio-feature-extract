@@ -20,9 +20,10 @@ do
             echo "=== Only beatmap start with \`$file\`."
             shift # past argument
             ;;
-        -s|--start)
+        -s|--start|--skip)
             start="$2"
-            echo "=== Skip \`$start\` beatmap sets."
+            skip="true"
+            echo "=== Start from Beatmap Set: \`$start\`."
             shift # past argument
             ;;
         --nothing)
@@ -35,8 +36,7 @@ do
             DEFAULT=YES
             ;;
         *)
-
-                    # unknown option
+                  # unknown option
             ;;
     esac
     shift # past argument or value
@@ -44,30 +44,37 @@ done
 
 case $1 in
     -h|--help)
-        echo "Usage: $0 <-f id> <-n number> DIRECTORY
+        echo "Usage: $0 <-f [id]> <-n [number]> DIRECTORY
         arguments:
-            -f, --file
-                Beatmap Set ID
-                Will match just the begining of a string
-                e.g. 1 will match 1 11 and 123
-            -n, --number
+            -f, --file [beatmapset_id]
+                Just Extract filename begining with [beatmapset_id]
+                Will match just the begining of a string.
+                This will not display what is skipped.
+                    e.g. 1 will match 1 11 and 123
+            -n, --number [count]
                 Maximium number of beatmap sets to extract
-            --nothing
-                Do nothing just scan files
+            --nothing [true/false/1/0]
+                Do nothing just scan files if [true]
+            -s, --start, --skip [filename]
+                Start from file [filename], skip the previouses.
+                You could use either part of the filename or an beatmap set id.
 
         example:
             $0
-
+                Do everything
             $0 -file 139677 Data/Beatmaps
-
-            $0 -file 1 -n 1 Data/Beatmaps
-
+                Only Extract \`139677\` from Dir: Data/Beatmaps
+            $0 -file 1 -n 1
+                Only Exteact the first Beatmap Set starting with \`1\` 
             $0 --nothing 1
-
+                See What to be extracted.
             $0 -file 1 --nothing 1
-
+                
             $0 -n 1 --nothing true
-
+                Test to see the first Beatmap Set 
+            $0 --nothing 1 -s 307
+                Test to see what will be extracted staring from 
+                beatmap set id begining with \`307\`
         " >&2
         exit 1
         shift # past argument
@@ -92,13 +99,23 @@ mkdir -p  "$trainable_gather_path"
 SAVEIFS=$IFS
 IFS=$(echo -en "\n\b")
 beatmaps_sets=$(ls "$allsets_path" | grep "^$file")
+
+echo "=== Using $allsets_path/"
 for set_name in ${beatmaps_sets[@]}
 do
+    if [ "$skip" == true ]; then
+        if [[ $set_name == *"$start"* ]]; then
+            skip="false"
+        else
+            echo ">     Skiped: $set_name"
+            continue
+        fi
+    fi 
     set_path="$allsets_path/$set_name"
     name=$(ls "$set_path"/*.osu | head -n 1)
     mp3name=$(python script/audioname.py "$name")
     mp3path="$set_path/$mp3name"
-    echo ">>> Extracting: $mp3path"
+    echo ">     Extracting: $set_name"
     set_training_path="$set_path/Trainings" 
     mkdir -p "$set_training_path" 
     
@@ -113,7 +130,7 @@ do
 
     for osu_path in "$set_path"/*.osu; do
         osu_diff=$(python script/osuDiff.py "$osu_path")
-        echo ">>>>> Difficualty: $osu_diff"
+        echo ">>     Difficulty: $osu_diff"
         if ! [ "$nothing" == true ] ; then
             # C
             python script/osu_to_target.py "$osu_path" > "$set_training_path/$osu_diff.target_features.v$version.csv"
