@@ -6,13 +6,13 @@ import argparse
 def getMIS(dy_bpm):
     mis_result = []
     count = 1
-    division = 8
+    division = 4
     for i in range(len(dy_bpm)):
-        srat_t, next_t, bpm = dy_bpm[i]
-        srat_t = 1000 * float(srat_t)
+        start, next_t, bpm, start_t = dy_bpm[i]
+        start_t = 1000 * float(start_t)
         next_t = 1000 * float(next_t)
         bpm = float(bpm)
-        simu_t = srat_t
+        simu_t = start_t
         delt = 1000 / (division * (bpm / 60)) 
         while (simu_t < next_t):
             mis_result.append([count, simu_t])

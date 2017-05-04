@@ -60,7 +60,7 @@ def isonset(x, y):
     return y_copy
 
 def isbeat(mis):
-    division = 8
+    division = 4
     return [[1] if i % division == 0 else [0] for i in range(len(mis))]
 
 def merge(onset_strength, is_onset, beat, mfcc):
