@@ -1,20 +1,22 @@
-#python mp3_mis_to_tr_f.py "Chasers - Lost.mp3" "mis.csv"
 import sys
 import librosa
 import argparse
 import csv
 import numpy as np
 
+# get onset strength
 def mis_onset_strenghth(o_env, mis):
     return [o_env[librosa.core.time_to_frames(e[1]/1000, sr=sr)[0]] for e in mis]
 
 
+# get onset feature
 def getOnset(y, sr):
     onset_result = librosa.onset.onset_detect(y=y, sr=sr, precise=True, units='time')
     onset_result = [[1000 * e] for e in onset_result]
     return onset_result
    
 
+# extratc mfcc feature from librosa 
 def getmfcc(y, sr, mis):
     # Let's make and display a mel-scaled power (energy-squared) spectrogram
     S = librosa.feature.melspectrogram(y, sr=sr, n_mels=128)
@@ -32,7 +34,7 @@ def getmfcc(y, sr, mis):
 
 
 
-
+# get the index of closest number of x in list y
 def closestindex(x, y):
     for i in range(len(y)):
         if y[i][1] == x:
@@ -45,6 +47,7 @@ def closestindex(x, y):
     if i == len(y) - 1:
         return i
 
+# get is it onset for every mis using the extracted onset feature, 
 def isonset(x, y):
     y_copy = [[] for i in range(len(y))]
     startindex = 0
@@ -59,10 +62,13 @@ def isonset(x, y):
             y_copy[i] = [0]
     return y_copy
 
+# get is it beat feature, every other 4 mis has a beat
 def isbeat(mis):
     division = 4
     return [[1] if i % division == 0 else [0] for i in range(len(mis))]
 
+
+# merge all the features in a matrix as training feature 
 def merge(onset_strength, is_onset, beat, mfcc):
     feature = []
     for i in range(len(onset_strength)):
@@ -94,9 +100,5 @@ if __name__ == "__main__":
     writer = csv.writer(sys.stdout)
     writer.writerows(tr_f)
     
-    # with open("tr_f.csv", "w") as file:
-    #     writer = csv.writer(file)
-    #     writer.writerows(tr_f)
-
 
     

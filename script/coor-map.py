@@ -1,4 +1,3 @@
-#python coor-map.py "13019_basara_0.55.osu"
 import sys
 import librosa
 import argparse

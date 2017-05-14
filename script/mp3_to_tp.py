@@ -6,7 +6,7 @@ import librosa.display
 import csv
     
 
-
+# get dynamic beat per minite
 def getbpm(y, sr):
     dynamic_bpm = librosa.beat.dynamic_tempo_summary(y=y, sr=sr, precise=True, units='time', precise_starting_beat=True)
     return dynamic_bpm
@@ -19,9 +19,7 @@ if __name__ == "__main__":
     y, sr = librosa.load(sys.argv[1], sr = None)
     dynamic_bpm = getbpm(y, sr)
     
+    # output dynamic beat per minite for saving
     writer = csv.writer(sys.stdout)
     writer.writerows(dynamic_bpm)
 
-    # with open("dynamic_bpm.csv", "w") as file:
-    #     writer = csv.writer(file)
-    #     writer.writerows(dynamic_bpm)

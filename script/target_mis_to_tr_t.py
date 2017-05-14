@@ -1,9 +1,11 @@
-#python target_mis_to_tr_t.py hitobject.csv mis.csv
 import sys
 import argparse
 import csv
 from mp3_mis_to_tr_f import closestindex
 
+# extract the training target, including x, y coordinates and is it hit object information
+# x stores the time of hit objects, y stores mis, check every mis is it a hitobject according x information
+# call the closestindex method in mp3_mis_to_tr_f.py
 def ishitobject(x, y):
     y_copy = [[] for i in range(len(y))]
     startindex = 0
@@ -24,20 +26,20 @@ if __name__ == "__main__":
         raise argparse.ArgumentTypeError('the number of argument has to be 3')
         exit(-1)
     
+    # read hitobject
     with open(sys.argv[1], 'r') as my_file:
         csvreader = csv.reader(my_file)
         hitobject = list(csvreader)
     
+    #read mis
     with open(sys.argv[2], 'r') as my_file:
         csvreader = csv.reader(my_file)
         mis = list(csvreader)
         mis = [[int(m[0]), float(m[1])]for m in mis]
+    
+    # get training target
     tr_t = ishitobject(hitobject, mis)
 
-
+    # output the training target for saving
     writer = csv.writer(sys.stdout)
     writer.writerows(tr_t)
-
-    # with open("tr_t.csv", "w") as file:
-    #     writer = csv.writer(file)
-    #     writer.writerows(tr_t)
