@@ -56,16 +56,16 @@ def read(filepath, mis, bpm, res, x_coor, y_coor):
                     break
 
         # delete the BeatmapID if needed
-        # target = "BeatmapID"
-        # for line in csvreader:
-        #     if len(line) != 0:
-        #         l = line[0].split(':')
-        #         if target not in l[0]:
-        #             contents.append(line)
-        #         else:
-        #             break
-        #     else:
-        #         contents.append(line)
+        target = "BeatmapID"
+        for line in csvreader:
+            if len(line) != 0:
+                l = line[0].split(':')
+                if target not in l[0]:
+                    contents.append(line)
+                else:
+                    break
+            else:
+                contents.append(line)
 
         #add new Timepoints
         target = "[TimingPoints]"
@@ -131,14 +131,6 @@ if __name__ == "__main__":
     if len(sys.argv) != 2:
         raise argparse.ArgumentTypeError('the number of argument has to be 2')
         exit(-1)
-
-    # path = "/Users/yanmingjun/Documents/osu-audio-feature-extract/Data/Beatmaps/537310 TO-MAS feat. Chima - FLIP FLAP FLIP FLAP/Trainings/"
-    # output_path = "/Users/yanmingjun/Documents/osu-audio-feature-extract/Data/Trainables/"
-    # osu_path = "/Users/yanmingjun/Documents/osu-audio-feature-extract/Data/Beatmaps/537310 TO-MAS feat. Chima - FLIP FLAP FLIP FLAP/"
-    # output_file = os.path.join(output_path, "refined_predict.csv")
-    # mis_file = os.path.join(path, "mis.v1.csv")
-    # dy_bpm_file = os.path.join(path, "timing_points.v1.csv")
-    # osu_file = os.path.join(osu_path, "TO-MAS feat. Chima - FLIP FLAP FLIP FLAP (Lanturn) [1.71].osu")
 
     path = "/Users/yanmingjun/Documents/osu-audio-feature-extract/Data/Beatmaps02/13019 Daisuke Achiwa - BASARA/Trainings/"
     output_path = "/Users/yanmingjun/Documents/osu-audio-feature-extract/Data/Trainables/"

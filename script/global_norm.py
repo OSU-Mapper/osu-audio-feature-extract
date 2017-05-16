@@ -26,6 +26,14 @@ def update(rootDir):
                     col = norm(col)
                 elif (i >= 3 and i <= 14):
                     col = mfcc_norm(col, min_bound, max_bound)
+                elif i == 15:
+                    min_bound = 0
+                    max_bound = 512
+                    col = coor_norm(col, min_bound, max_bound)
+                elif i == 16:
+                    min_bound = 0
+                    max_bound = 384
+                    col = coor_norm(col, min_bound, max_bound)
                 res.append(col)
             res = list(map(list, zip(*res)))
 
@@ -39,12 +47,20 @@ def norm(col):
     min_bound = min(col)
     max_bound = max(col)
     for i in range(len(col)):
-        print ((col[i] - min_bound))
         col[i] = (col[i] - min_bound) / (max_bound - min_bound)
     return col
 
 def mfcc_norm(col, min_bound, max_bound):
     for i in range(len(col)):
+        col[i] = (col[i] - min_bound) / (max_bound - min_bound)
+    return col
+
+def coor_norm(col, min_bound, max_bound):
+    for i in range(len(col)):
+        if col[i] < min_bound:
+            col[i] = min_bound
+        elif col[i] > max_bound:
+            col[i] = max_bound
         col[i] = (col[i] - min_bound) / (max_bound - min_bound)
     return col
 
