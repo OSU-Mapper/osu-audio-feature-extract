@@ -21,11 +21,13 @@ Data/Beatmaps/*
 
 
 ## normalization
-```python global_norm.py Data/Trainables
+``` bash
+python global_norm.py Data/Trainables
 ```
 
 ## map created
-``` python coor-map.py refined_predict.csv
+``` bash 
+python coor-map.py refined_predict.csv
 ```
 
 
