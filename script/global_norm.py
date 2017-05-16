@@ -42,7 +42,7 @@ def update(rootDir):
                 writer = csv.writer(file)
                 writer.writerows(res)
 
-
+# onset strength normalization
 def norm(col):
     min_bound = min(col)
     max_bound = max(col)
@@ -50,11 +50,13 @@ def norm(col):
         col[i] = (col[i] - min_bound) / (max_bound - min_bound)
     return col
 
+# mfcc normalization
 def mfcc_norm(col, min_bound, max_bound):
     for i in range(len(col)):
         col[i] = (col[i] - min_bound) / (max_bound - min_bound)
     return col
 
+#coordinates normalization
 def coor_norm(col, min_bound, max_bound):
     for i in range(len(col)):
         if col[i] < min_bound:
