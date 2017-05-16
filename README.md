@@ -19,3 +19,16 @@ pip install --upgrade git+https://github.com/OSU-Mapper/librosa.git@dynamic-temp
 ### Default path to Beatmaps
 Data/Beatmaps/*
 
+
+## normalization
+``` bash
+python global_norm.py Data/Trainables
+```
+
+## map created
+``` bash 
+python coor-map.py refined_predict.csv
+```
+
+
+
